@@ -30,6 +30,7 @@ test_loader = torch.utils.data.DataLoader(test_dataset, batch_size=batch_size,
                                         shuffle=False)
 
 
+
 class FashionCNN(nn.Module):
     
     def __init__(self):
