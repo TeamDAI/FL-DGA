@@ -236,9 +236,10 @@ def save_dataframe():
     #     my_df = pd.concat([my_df, appending_df], ignore_index=True)
 
     with open(os.path.join(data_folder, 'iid_data_1.txt'), 'r') as fp:
-        domains_with_type = [[(line.strip()), 'benign', 0] for line in fp.readlines()[:60000]]
+        domains_with_type = [line.strip().split('\t') for line in fp.readlines()]
+        # print(domains_with_type)
         appending_df = pd.DataFrame(domains_with_type, columns=['domain', 'type', 'label'])
-        my_df = pd.concat([my_df, appending_df], ignore_index=True)    
+        my_df = pd.concat([my_df, appending_df], ignore_index=True) 
 
     return my_df
 
@@ -302,8 +303,8 @@ num_labels =4
 my_df = save_dataframe()
 trainloader, testloader = split_train_test_data(my_df)
 
-net = LSTMModel()
-torch.save(net.state_dict(), "saved_model/LSTMModel.pt")
+# net = LSTMModel()
+# torch.save(net.state_dict(), "saved_model/LSTMModel.pt")
 
 def start_training_task():
     lr = 3e-4
@@ -358,3 +359,5 @@ def aggregated_models(client_trainres_dict, n_round):
     torch.save(avg_state_dict, "saved_model/LSTMModel.pt")
     #delete parameter in client_trainres to start new round
     client_trainres_dict.clear()
+
+start_training_task()
