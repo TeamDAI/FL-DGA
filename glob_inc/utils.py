@@ -2,6 +2,8 @@ import os
 import time
 from .color import color
 import ping3
+from datetime import datetime
+
 def find_color(color_):
     if color_ == "red":
         return color.RED
@@ -19,15 +21,15 @@ def find_color(color_):
         return ""
 
 def cur_time_str():
-    cur_time = time.localtime()
-    cur_time_string = "[" + time.strftime("%H:%M:%S", cur_time) + "]"
+    cur_time = datetime.now()
+    cur_time_string = "[" + cur_time.strftime('%Y-%m-%d %H:%M:%S.%f')[:-3] + "] "
     return cur_time_string
 
-def print_log(line, color_ = "", show_time = True):
+def print_log(line, color_ = "green", show_time = True):
     if type(line) == str:
         color_str = find_color(color_)
         if show_time == True:
-            print(cur_time_str(), end=" ")
+            print(color.PURPLE+cur_time_str(), end=color.END)
         else:
             line = "           " + line
         print(color_str + line + color.END)

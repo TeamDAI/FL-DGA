@@ -1,0 +1,7 @@
+python==3.10
+paho-mqtt==1.6.1
+torch torchvision
+numpy==1.19.4
+ping3
+json
+matplotlib==3.7.5

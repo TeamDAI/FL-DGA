@@ -6,21 +6,19 @@ import os
 import time
 import json
 import numpy as np
-from model_api.src.ml_api import start_training_task
+from collections import OrderedDict
+from model_api.src.FashionMnist import start_training_task
 
 
-broker_host = "192.168.10.129"
-broker_name = "192.168.10.129"
-# broker_name = "192.168.139.129"
+broker_name = "100.82.9.118"
+#broker_name = "192.168.10.128"
+
 def do_evaluate_connection(client):
     print_log("doing ping")
     client_id = client._client_id.decode("utf-8")
-    result = ping_host(broker_host)
-    #result = 0
-
+    result = ping_host(broker_name)
     result["client_id"] = client_id
     result["task"] = "EVA_CONN"
-    #print(result)
     client.publish(topic="dynamicFL/res/"+client_id, payload=json.dumps(result))
     print_log(f"publish to topic dynamicFL/res/{client_id}")
     return result
@@ -37,7 +35,6 @@ def do_train(client):
         "task": "TRAIN",
         "weight": result_np
     }
-    #result = 0
     client.publish(topic="dynamicFL/res/"+client_id, payload=json.dumps(payload))
     print_log(f"end training")
 
@@ -48,13 +45,12 @@ def do_update_model():
     pass
 
 def do_stop_client(client):
-    client.stop_loop()
     print_log("stop client")
+    client.loop_stop()
 
 def handle_task(msg, client):
     task_name = msg.payload.decode("utf-8")
     if task_name == "EVA_CONN":
-       #print("done")
         do_evaluate_connection(client)
     elif task_name == "EVA_DATA":
         do_evaluate_data(client)
